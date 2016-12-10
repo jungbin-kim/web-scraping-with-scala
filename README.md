@@ -6,10 +6,10 @@ sbt를 이용하여 scala 프로젝트를 시작할 때, 사용하기 위해서 
 
 ## How to use
 
-1. Clone start kit project 
+1. Clone start-kit into own folder
 
 ```bash
-$ git clone https://github.com/jungbin-kim/scala-sbt-start-kit.git
+$ git clone https://github.com/jungbin-kim/scala-sbt-start-kit.git {folder name}
 ```
 
 2. Custom project
