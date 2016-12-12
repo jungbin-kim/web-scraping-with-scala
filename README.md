@@ -11,7 +11,7 @@ $ sbt run
 Multiple main classes detected, select one to run:
 
  [1] Scraper1 # Fisrt example 
- [2] Scaraper2 # Preparing...
+ [2] Scaraper2 # Using Scala scraper's JsoupBrowser with exception case
 
 ```
 
