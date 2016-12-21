@@ -28,3 +28,23 @@ object Scraper2 extends App {
   }
   println(nameList)
 }
+
+/*
+* 1. Wiki 페이지 안에 항목 페이지로 연결되는 Path 출력
+*   - id가 bodyContent 인 element 안에 존재
+*   - Path는 /wiki/ 로 시작
+*   - Path는 세미콜론 포함하지 않음 ex) /wiki/Category: 와 같은 형태는 항목 페이지로 연결되지 않음.
+* */
+object Scraper3 extends App {
+  object browser extends CustomBrowser
+
+  val url = "http://en.wikipedia.org/wiki/Kevin_Bacon"
+  val doc = browser.getDocumentFromUrl( url )
+  doc match {
+    case Left(e) =>
+      println(e)
+    case Right(b) =>
+      val eles = ((b >> element("#bodyContent")) >> elementList("a")).filter(_.attr("href").matches("^(/wiki/)((?!:).)*$"))
+      eles foreach ( e => println(e.attr("href")) )
+  }
+}
