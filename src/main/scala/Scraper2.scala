@@ -3,6 +3,8 @@ import net.ruippeixotog.scalascraper.dsl.DSL._
 import net.ruippeixotog.scalascraper.dsl.DSL.Extract._
 import net.ruippeixotog.scalascraper.model.Document
 
+
+
 object Scraper2 extends App {
 
   object browser extends CustomBrowser
@@ -36,13 +38,13 @@ object Scraper2 extends App {
 *   - Path는 /wiki/ 로 시작
 *   - Path는 세미콜론 포함하지 않음 ex) /wiki/Category: 와 같은 형태는 항목 페이지로 연결되지 않음.
 * 2. Wiki 페이지 안에 항목 페이지로 연결되는 Path들의 리스트를 반환하는 getLinks 함수
+* 3. 처음 getLinks를 호출해서 반환한 주소들 중 랜덤한 한 주소를 선택하여 getLinks 를 다시 호출하는 작업을, 프로그램을 끝내거나 새 페이지에 항목 링크가 없을 때 까지 반복
 * */
 object Scraper3 extends App {
+  import scala.util.Random
+  import scala.annotation.tailrec
+
   object browser extends CustomBrowser
-
-  type Result[T] = Either[ErrorMessage, T]
-
-  val url = "http://en.wikipedia.org/wiki/Kevin_Bacon"
 
   def getEither[T, U](eitherBlock: Either[ErrorMessage, U])
                      (nextBlock: (U => Either[ErrorMessage, T])): Either[ErrorMessage, T] = eitherBlock match {
@@ -64,5 +66,16 @@ object Scraper3 extends App {
     }
   }
 
-  getLinks(url) fold(l=> println(l), r=>println(r mkString "\n"))
+  @tailrec
+  def loopGetLinks(targetUrl: String ): Either[ErrorMessage, List[String]] = getLinks( targetUrl ) match {
+    case Left(l) => Left(l)
+    case Right(r) if r.isEmpty => Left( ErrorMessage(0, "Empty Links", targetUrl) )
+    case Right(r) =>
+      val nextUrl =  "http://en.wikipedia.org" + Random.shuffle(r).head
+      println(s"Next Url: $nextUrl")
+      loopGetLinks( nextUrl )
+  }
+
+  val seedUrl = "http://en.wikipedia.org/wiki/Kevin_Bacon"
+  loopGetLinks( seedUrl )
 }
