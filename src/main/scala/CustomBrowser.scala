@@ -4,9 +4,7 @@ import net.ruippeixotog.scalascraper.model.Document
 /**
   * Created by jungbin on 2016. 12. 20..
   */
-
 trait CustomBrowser extends JsoupBrowser {
-  case class ErrorMessage( statusCode: Int, message: String, url: String )
 
   val browser = JsoupBrowser()
 
